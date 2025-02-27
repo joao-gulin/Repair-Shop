@@ -1,4 +1,7 @@
+import ClientsTable from "@/components/ClientsTable";
 import { useClient } from "../hooks/useClients";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function Main() {
   const { isLoading, isError, clients } = useClient()
@@ -20,8 +23,10 @@ export default function Main() {
   }
 
   return (
-    <div>
-      <
+    <div className="p-6 max-w-4xl mx-auto space-y-4">
+      <ClientsTable 
+        data={clients}
+      />
     </div>
   )
 }

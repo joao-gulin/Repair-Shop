@@ -16,7 +16,8 @@ interface ClientsTableProps {
 export default function ClientsTable({ data }: ClientsTableProps) {
 
   return (
-    <Table>
+    <div className="border rounded">
+        <Table>
       <TableCaption>A list of your clients</TableCaption>
       <TableHeader>
         <TableRow>
@@ -31,6 +32,7 @@ export default function ClientsTable({ data }: ClientsTableProps) {
         {data.map((client) => (
           <TableRow key={client.id}>
             <TableCell className="font-medium">{client.id}</TableCell>
+            <TableCell>{client.createdAt}</TableCell>
             <TableCell>{client.name}</TableCell>
             <TableCell>{client.phone}</TableCell>
             <TableCell>{client.email}</TableCell>
@@ -38,5 +40,6 @@ export default function ClientsTable({ data }: ClientsTableProps) {
         ))}
       </TableBody>
     </Table>
+    </div>
   )
 }

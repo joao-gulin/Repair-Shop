@@ -11,6 +11,6 @@ export function useClient() {
   return {
     isLoading,
     isError,
-    clients: data || [],
+    clients: data ?? [],
   }
 }
