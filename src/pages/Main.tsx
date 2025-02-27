@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { useClient } from "../hooks/useClients";
 
 export default function Main() {
@@ -22,6 +21,7 @@ export default function Main() {
 
   return (
     <div>
+      <
     </div>
   )
 }
