@@ -6,6 +6,7 @@ class RepairShop {
   async fetchClients(): Promise<Clients> {
     try {
       const response = await axios.get(API_CONFIG.BASE_URL)
+      console.log(response)
       return response.data
     } catch (error) {
       console.error(error);
