@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useClient } from "../hooks/useClients";
 
 export default function Main() {
@@ -15,11 +16,12 @@ export default function Main() {
     )
   }
 
+  if (!clients) {
+    return <div>No clients available.</div>;
+  }
+
   return (
     <div>
-      {clients.map((client) => {
-        <p>{client.name}</p>
-      })}
     </div>
   )
 }

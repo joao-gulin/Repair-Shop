@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { repairShop } from "../api/repairs";
+import type { Clients } from "../api/types";
 
 export function useClient() {
-  const { isLoading, isError, data } = useQuery({
+  const { isLoading, isError, data } = useQuery<Clients>({
     queryKey: ['clients'],
     queryFn: () => repairShop.fetchClients(),
   })
@@ -10,11 +11,6 @@ export function useClient() {
   return {
     isLoading,
     isError,
-    clients: data?.map(client => ({
-      id: client.id,
-      createdAt: client.createdAt,
-      name: client.name,
-      phone: client.phone
-    })) || [],
+    clients: data || [],
   }
 }
