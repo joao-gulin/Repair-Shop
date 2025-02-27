@@ -4,7 +4,6 @@ import {
   ClipboardList,
   FileText,
   Home,
-  Moon,
   Package,
   Search,
   Settings,
@@ -28,7 +27,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { Button } from "./ui/button"
+
+import { Link } from "react-router-dom"
+import { ThemeToggle } from "./theme-toggle"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -37,12 +38,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="flex items-center gap-2 px-2 py-3">
           <Wrench className="h-6 w-6 text-primary" />
           <span className="text-lg font-bold">Repair-Shop</span>
-          <Button 
-          variant="ghost"
-          size="icon"
-          >
-            <Moon></Moon>
-          </Button>
+          <div className="ml-11">
+            <ThemeToggle />
+          </div>
         </div>
         <div className="px-2 pb-2">
           <div className="relative">
@@ -57,10 +55,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/">
+                  <Link to="/">
                     <Home className="h-4 w-4" />
                     <span>Dashboard</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -73,18 +71,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/customers">
+                  <Link to="/customers">
                     <Users className="h-4 w-4" />
                     <span>Customers</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/repairs">
+                  <Link to="/repairs">
                     <Tool className="h-4 w-4" />
                     <span>Repairs</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
