@@ -25,9 +25,8 @@ export default function Customers() {
   return (
     <>
       <PageHeader title="Customers">
-
       </PageHeader>
-      <div className="p-6 max-w-4xl mx-auto space-y-4">
+      <div className="p-4 max-w-4xl mx-auto space-y-4">
         <ClientsTable 
           data={clients}
         />
