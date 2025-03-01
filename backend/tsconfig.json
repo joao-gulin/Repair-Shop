@@ -9,7 +9,6 @@
     "allowJs": true,
 
     // Bundler mode
-    "moduleResolution": "classic",
     "allowImportingTsExtensions": true,
     "noEmit": true,
 
