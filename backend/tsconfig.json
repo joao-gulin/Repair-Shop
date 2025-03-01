@@ -1,27 +1,22 @@
 {
   "compilerOptions": {
-    // Enable latest features
     "lib": ["ESNext", "DOM"],
     "target": "ES2018",
     "module": "CommonJS",
     "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": true,
-
-    // Bundler mode
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-
-    // Best practices
+    "noEmit": false, // Altere para false ou remova esta linha
+    "outDir": "dist", // Adicione essa linha para especificar a pasta de saída
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
-
-    // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

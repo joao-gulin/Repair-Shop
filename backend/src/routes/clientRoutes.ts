@@ -1,22 +1,46 @@
-import { FastifyInstance } from 'fastify'
-import { authenticate } from '../middleware/auth'
-import { validateRequest } from '../middleware/validate'
-import { createClientSchema, updateClientSchema } from '../utils/validation'
+// src/routes/clientRoutes.ts
+import { FastifyInstance } from "fastify";
 import {
   getClients,
   getClientById,
   createClient,
   updateClient,
   deleteClient
-} from '../controllers/clientController';
+} from "../controllers/clientController";
+import { authenticate } from "../middleware/auth";
+import { createClientSchema, updateClientSchema } from "../utils/validation";
+import { validateRequest } from "../middleware/validate";
+import type { z } from "zod";
 
-export async function clientRoutes(fastify: FastifyInstance) {
-  // Apply authentication to all routes
-  fastify.addHook('preHandler', authenticate)
+export default async function clientRoutes(fastify: FastifyInstance) {
+  // Listar clientes (pode ou não ter validação)
+  fastify.get("/", { preHandler: authenticate }, getClients);
 
-  fastify.get('/', getClients)
-  fastify.get('/:id', getClientById)
-  fastify.post('/', { preHandler: validateRequest(createClientSchema) }, createClient)
-  fastify.put('/:id', { preHandler: validateRequest(updateClient) }, updateClient)
-  fastify.delete('/:id', deleteClient)
+  // Obter um cliente pelo ID
+  fastify.get<{ Params: { id: string } }>(
+    "/:id",
+    { preHandler: authenticate },
+    getClientById
+  );
+
+  // Criar um cliente
+  fastify.post<{ Body: z.infer<typeof createClientSchema> }>(
+    "/",
+    { preHandler: validateRequest(createClientSchema) },
+    createClient
+  );
+
+  // Atualizar um cliente (atenção ao schema)
+  fastify.put<{ Params: { id: string }; Body: z.infer<typeof updateClientSchema> }>(
+    "/:id",
+    { preHandler: validateRequest(updateClientSchema) },
+    updateClient
+  );
+
+  // Deletar um cliente
+  fastify.delete<{ Params: { id: string } }>(
+    "/:id",
+    { preHandler: authenticate },
+    deleteClient
+  );
 }
