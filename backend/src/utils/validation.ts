@@ -67,3 +67,11 @@ export const addPartToWorkOrderSchema = z.object({
   partId: z.string(),
   quantity: z.number().int().positive()
 })
+
+// User Schemas
+export const updateUserSchema = z.object({
+  name: z.string().min(2).optional(),
+  email: z.string().email().optional(),
+  password: z.string().min(6).optional(),
+  role: z.string().optional(),
+});
