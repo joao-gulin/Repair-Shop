@@ -17,7 +17,7 @@ export const getClients = async (request: FastifyRequest ,reply: FastifyReply) =
 }
 
 export const getClientById = async (
-  request: FastifyRequest<{ Params: { id: string} }>,
+  request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) => {
   const { id } = request.params

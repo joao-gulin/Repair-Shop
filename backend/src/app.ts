@@ -6,14 +6,22 @@ import dotenv from 'dotenv'
 
 import { authRoutes } from './routes/authRoutes'
 import clientRoutes from './routes/clientRoutes'
+import userRoutes from './routes/userRoutes';
 
 dotenv.config()
 
 export const build = async (): Promise<FastifyInstance> => {
   const app = Fastify({
     logger: {
-      level: 'debug',
-    }
+      level: 'info',
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          translateTime: 'HH:MM:ss Z',
+          ignore: 'pid,hostname',
+        },
+      },
+    },
   })
 
   // Register plugins
@@ -28,6 +36,7 @@ export const build = async (): Promise<FastifyInstance> => {
   await app.register(formbody)
 
   app.register(authRoutes, { prefix: '/api/auth' })
+  app.register(userRoutes, { prefix: '/api/users' })
   app.register(clientRoutes, { prefix: '/api/clients' })
 
   app.get('/health', async () => {

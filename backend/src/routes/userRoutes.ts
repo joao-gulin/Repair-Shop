@@ -1,13 +1,32 @@
-// src/routes/userRoutes.ts
-import { FastifyInstance } from 'fastify';
-import { registerUser, getUsers, getUserById, updateUser, deleteUser } from '../controllers/userController';
-import { validateRequest } from '../middleware/validate';
-import { registerSchema, updateUserSchema } from '../utils/validation';
+import { FastifyInstance } from "fastify";
+import {
+  getUserById,
+  registerUser,
+  updateUser
+} from "../controllers/userController";
+import { validateRequest } from "../middleware/validate";
+import { getUserSchema, registerSchema, updateUserSchema } from "../utils/validation";
+import type { z } from "zod";
 
-export async function userRoutes(fastify: FastifyInstance) {
-  fastify.post('/register', { preHandler: validateRequest(registerSchema) }, registerUser);
-  fastify.get('/', getUsers);
-  fastify.get('/:id', getUserById);
-  fastify.put('/:id', { preHandler: validateRequest(updateUserSchema) }, updateUser);
-  fastify.delete('/:id', deleteUser);
+export default async function userRoutes(fastify: FastifyInstance) {
+  // Register user
+  fastify.post<{ Body: z.infer<typeof registerSchema> }>(
+    "/register",
+    { preHandler: validateRequest(registerSchema) },
+    registerUser
+  );
+
+  // Update user by ID
+  fastify.put<{ Params: { id: string }; Body: z.infer<typeof updateUserSchema> }>(
+    "/:id",
+    { preHandler: validateRequest(updateUserSchema) },
+    updateUser
+  );
+  
+  // Get User by ID
+  fastify.get<{ Params: z.infer<typeof getUserSchema> }>(
+    "/:id", // Fetch user by ID
+    { preHandler: validateRequest(getUserSchema) },
+    getUserById
+  );
 }

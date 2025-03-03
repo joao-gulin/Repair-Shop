@@ -75,3 +75,7 @@ export const updateUserSchema = z.object({
   password: z.string().min(6).optional(),
   role: z.string().optional(),
 });
+
+export const getUserSchema = z.object({
+  id: z.string().min(1, "ID is required"), // Validate that the ID is a non-empty string
+});
