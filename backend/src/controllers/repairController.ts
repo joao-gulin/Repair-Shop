@@ -1,5 +1,4 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { RepairStatus } from '@prisma/client'
 import { prisma } from "../utils/prisma";
 import { createRepairSchema, updateRepairSchema } from "../utils/validation";
 import { z } from 'zod'
@@ -148,6 +147,58 @@ export const updateRepair = async (
     }
 
     return updateRepair
+  } catch (error) {
+    request.log.error(error)
+    return reply.status(500).send({ error: 'Internal Server Error' })
+  }
+}
+
+export const deleteRepair = async (
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) => {
+  const { id } = request.params
+  try {
+    const existingRepair = await prisma.repair.findUnique({
+      where: { id }
+    })
+    if (!existingRepair) {
+      return reply.status(404).send({ error: 'Repair not found' })
+    }
+
+    // Update work order total cost
+    await prisma.workOrder.update({
+      where: { id: existingRepair.workOrderId },
+      data: {
+        totalCost: {
+          decrement: existingRepair.cost
+        }
+      }
+    })
+
+    // Delete the repair
+    await prisma.repair.delete({
+      where: { id }
+    })
+
+    // Check if this was the last repair and update work order status if needed
+    const remainingRepairs = await prisma.repair.count({
+      where: { workOrderId: existingRepair.workOrderId }
+    });
+
+    if (remainingRepairs === 0) {
+      const workOrder = await prisma.workOrder.findUnique({
+        where: { id: existingRepair.workOrderId }
+      });
+
+      if (workOrder && workOrder.status === 'IN_PROGRESS') {
+        await prisma.workOrder.update({
+          where: { id: existingRepair.workOrderId },
+          data: { status: 'OPEN' }
+        });
+      }
+    }
+    return { message: 'Repair deleted successfully' }
   } catch (error) {
     request.log.error(error)
     return reply.status(500).send({ error: 'Internal Server Error' })
