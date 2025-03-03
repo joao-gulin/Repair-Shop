@@ -9,14 +9,37 @@ import {
   updateRepair,
   deleteRepair
 } from '../controllers/repairController';
+import type { z } from 'zod';
 
 export async function repairRoutes(fastify: FastifyInstance) {
-  // Apply authentication to all routes
-  fastify.addHook('preHandler', authenticate);
+  // Listar Reparações (pode ou não ter validação)
+  fastify.get("/", { preHandler: authenticate }, getRepairs);
 
-  fastify.get('/', getRepairs);
-  fastify.get('/:id', getRepairById);
-  fastify.post('/', { preHandler: validateRequest(createRepairSchema) }, createRepair);
-  fastify.put('/:id', { preHandler: validateRequest(updateRepairSchema) }, updateRepair);
-  fastify.delete('/:id', deleteRepair);
+  // Obter um cliente pelo ID
+  fastify.get<{ Params: { id: string } }>(
+    "/:id",
+    { preHandler: authenticate },
+    getRepairById
+  );
+
+  // Criar uma Reparação
+  fastify.post<{ Body: z.infer<typeof createRepairSchema> }>(
+    "/",
+    { preHandler: validateRequest(createRepairSchema) },
+    createRepair
+  );
+
+  // Atualizar um cliente (atenção ao schema)
+  fastify.put<{ Params: { id: string }; Body: z.infer<typeof updateRepairSchema> }>(
+    "/:id",
+    { preHandler: validateRequest(updateRepairSchema) },
+    updateRepair
+  );
+
+  // Deletar um cliente
+  fastify.delete<{ Params: { id: string } }>(
+    "/:id",
+    { preHandler: authenticate },
+    deleteRepair
+  );
 }
