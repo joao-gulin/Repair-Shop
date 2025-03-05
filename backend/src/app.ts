@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import { authRoutes } from './routes/authRoutes'
 import clientRoutes from './routes/clientRoutes'
 import userRoutes from './routes/userRoutes';
+import { repairRoutes } from './routes/repairRoutes';
 
 dotenv.config()
 
@@ -38,6 +39,7 @@ export const build = async (): Promise<FastifyInstance> => {
   app.register(authRoutes, { prefix: '/api/auth' })
   app.register(userRoutes, { prefix: '/api/users' })
   app.register(clientRoutes, { prefix: '/api/clients' })
+  app.register(repairRoutes, { prefix: '/api/repairs' })
 
   app.get('/health', async () => {
     return { status: 'OK' };
